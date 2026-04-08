@@ -8,9 +8,9 @@ An AI-powered chatbot that analyzes Indian stock market sentiment using **YouTub
 
 This project solves the problem of **fragmented market insights** by aggregating:
 
-* 📺 YouTube trading videos (via Apify)
-* 📈 NSE/BSE bulk & block deal data
-* 🤖 AI-based sentiment analysis
+*  YouTube trading videos (via Apify)
+*  NSE/BSE bulk & block deal data
+*  AI-based sentiment analysis
 
  The chatbot provides:
 

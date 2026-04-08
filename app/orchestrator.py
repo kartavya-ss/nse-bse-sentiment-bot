@@ -97,7 +97,7 @@ class SentimentSystem:
         )
         cache_key = hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
 
-        # ✅ Check cache first
+        #  Check cache first
         cached = self.store.get_chat_cache(cache_key, ttl_seconds=settings.chat_cache_ttl_seconds)
         if cached:
             try:
@@ -106,7 +106,7 @@ class SentimentSystem:
                 logger.warning("Invalid cached ChatResponse detected; invalidating cache key")
                 self.store.delete_chat_cache(cache_key)
 
-        # ✅ Retrieve limited docs (important for cost + rate limit)
+        #  Retrieve limited docs (important for cost + rate limit)
         docs = await self.rag_agent.retrieve(question, top_k=min(self.dynamic_top_k, 3))
         if not docs:
             return ChatResponse(
@@ -116,10 +116,10 @@ class SentimentSystem:
             )
 
         try:
-            # ⏳ Delay to avoid rate limit
+            #  Delay to avoid rate limit
             await asyncio.sleep(2)
 
-            # 🤖 Single LLM call
+            #  Single LLM call
             response = await self.hermes.loop(
                 "chatbot_answer",
                 {"question": question, "context_docs": docs},
@@ -127,10 +127,10 @@ class SentimentSystem:
             )
 
         except Exception as e:
-            # 🚨 Fallback if LLM fails (429 or any error)
+            #  Fallback if LLM fails (429 or any error)
             logger.warning(f"LLM failed, using fallback: {e}")
 
-            fallback_text = "📊 **Market Sentiment:** "
+            fallback_text = " **Market Sentiment:** "
 
             # Slightly more robust fallback sentiment logic from grounded snippets.
             buy_count = 0
@@ -147,7 +147,7 @@ class SentimentSystem:
                 sentiment = "BULLISH"
             else:
                 sentiment = "NEUTRAL"
-            fallback_text += sentiment + "\n\n🧠 Key Insights:\n"
+            fallback_text += sentiment + "\n\n Key Insights:\n"
             citations: list[SourceCitation] = []
             unique_sources: dict[str, dict[str, Any]] = {}
             for d in docs:
@@ -182,7 +182,7 @@ class SentimentSystem:
                 recommendation = "Consider selling or avoiding short-term positions."
             else:
                 recommendation = "Hold or wait for clearer signals."
-            fallback_text += f"\n📈 Recommendation:\n{recommendation}\n\n📌 Sources:\n"
+            fallback_text += f"\n Recommendation:\n{recommendation}\n\n Sources:\n"
             for i, d in enumerate(unique_docs, 1):
                 source_type = d.get("source_type", "youtube")
                 if source_type not in {"youtube", "market_deal"}:
@@ -210,7 +210,7 @@ class SentimentSystem:
                 grounded=True,
             )
 
-        # 💾 Cache result
+        #  Cache result
         self.store.upsert_chat_cache(cache_key, response.model_dump())
 
         return response

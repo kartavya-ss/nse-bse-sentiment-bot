@@ -111,11 +111,11 @@ class ChatbotAgent(BaseAgent):
         answer = (
             f"Stock Market Sentiment: {sentiment_label}\n\n"
             "Sentiment is based on aggregated signals from multiple recent trading videos.\n\n"
-            "🧠 Key Insights:\n"
+            " Key Insights:\n"
             + "\n".join(insight_lines)
-            + "\n\n📈 Recommendation:\n"
+            + "\n\n Recommendation:\n"
             + recommendation
-            + "\n\n📌 Sources:\n"
+            + "\n\n Sources:\n"
             + ("\n".join(citation_lines) if citation_lines else "1. No grounded sources available")
         )
         return ChatResponse(answer=answer, citations=citations, grounded=grounded)

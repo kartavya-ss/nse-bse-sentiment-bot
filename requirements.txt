@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+pydantic>=2
+pydantic-settings
+httpx
+tenacity
+python-dotenv
+numpy
+faiss-cpu
+sentence-transformers
+apify-client
+jugaad-data
+nsepy
+pandas
+orjson
+hermes-agent
+youtube-transcript-api
